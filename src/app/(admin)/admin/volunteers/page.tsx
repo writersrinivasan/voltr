@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { db } from "@/lib/db";
 import { volunteerProfiles } from "@/lib/db/schema";
 import { eq, ilike, or, sql, desc } from "drizzle-orm";

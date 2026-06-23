@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { db } from "@/lib/db";
 import { auditLogs, users } from "@/lib/db/schema";
 import { desc, sql } from "drizzle-orm";

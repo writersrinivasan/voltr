@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { getSession } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 import { volunteerProfiles } from "@/lib/db/schema";
