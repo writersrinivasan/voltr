@@ -1,0 +1,164 @@
+<!-- @dsCard group="VOLTR App" viewport="1280x720" name="Volunteer Dashboard" subtitle="Volunteer portal — profile status, KPI cards, profile summary" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>VOLTR — Volunteer Dashboard</title>
+<link rel="stylesheet" href="../../styles.css"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans, system-ui, sans-serif); background: var(--surface-sunken, #F1ECE2); color: var(--text-body); line-height: 1.5; min-height: 100vh; }
+
+  /* TOPBAR */
+  .topbar { background: var(--surface-raised); border-bottom: 1px solid var(--border-subtle); height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
+  .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--text-strong); }
+  .logo-mark { width: 28px; height: 28px; border-radius: 7px; background: var(--brand); color: #fff; font-size: 12px; font-weight: 800; display: grid; place-items: center; }
+  .nav { display: flex; gap: 24px; }
+  .nav a { font-size: 13px; color: var(--text-muted); text-decoration: none; }
+  .nav a.active { color: var(--brand); font-weight: 700; }
+  .sign-out { font-size: 12px; color: var(--text-subtle); cursor: pointer; }
+
+  /* CONTENT */
+  .content { max-width: 880px; margin: 0 auto; padding: 32px 24px; }
+
+  /* PAGE HEADER */
+  .page-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; }
+  .page-head h1 { font-size: 22px; font-weight: 800; color: var(--text-strong); }
+  .page-head p { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+  .status-pill { padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .pill-active { background: var(--green-100); color: var(--green-700); border: 1.5px solid var(--green-200); }
+  .pill-pending { background: var(--amber-100); color: var(--amber-700); border: 1.5px solid var(--amber-300); }
+
+  /* ALERT BANNER */
+  .alert { padding: 14px 18px; border-radius: 10px; font-size: 13px; margin-bottom: 20px; }
+  .alert-warning { background: var(--amber-100); border: 1px solid var(--amber-300); color: var(--amber-700); }
+
+  /* KPI GRID */
+  .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+  .kpi-card { background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 18px 20px; }
+  .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+  .kpi-value { font-size: 30px; font-weight: 800; color: var(--text-strong); margin-top: 6px; }
+  .kpi-note { font-size: 11px; color: var(--text-subtle); margin-top: 4px; }
+
+  /* PROFILE SUMMARY */
+  .profile-card { background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 24px 28px; }
+  .profile-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .profile-card-header h2 { font-size: 15px; font-weight: 700; color: var(--text-strong); }
+  .edit-btn { padding: 6px 16px; background: var(--surface-sunken); border: 1.5px solid var(--border-default); border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-body); cursor: pointer; }
+  .profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .pf-field label { font-size: 11px; font-weight: 600; color: var(--text-subtle); text-transform: uppercase; letter-spacing: 0.4px; }
+  .pf-field p { font-size: 14px; color: var(--text-strong); font-weight: 600; margin-top: 3px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 3px; }
+  .chip { padding: 3px 10px; border-radius: 999px; background: var(--brand-softer); color: var(--brand); font-size: 12px; font-weight: 600; }
+
+  /* IMPACT TEASER */
+  .impact-teaser { background: linear-gradient(135deg, var(--green-700), var(--green-900)); border-radius: 14px; padding: 28px 32px; margin-top: 16px; display: flex; align-items: center; justify-content: space-between; }
+  .impact-text h3 { font-size: 17px; font-weight: 700; color: #fff; }
+  .impact-text p { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 4px; }
+  .impact-badge { background: rgba(255,255,255,0.12); padding: 8px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-mark">M</div>
+    VOLTR
+  </div>
+  <nav class="nav">
+    <a href="#" class="active">Dashboard</a>
+    <a href="#">My Profile</a>
+    <a href="#">Availability</a>
+  </nav>
+  <span class="sign-out">Sign out</span>
+</div>
+
+<div class="content">
+
+  <!-- PAGE HEADER -->
+  <div class="page-head">
+    <div>
+      <h1>Welcome back, Priya 👋</h1>
+      <p>Here's an overview of your volunteer profile</p>
+    </div>
+    <span class="status-pill pill-active">✓ Active</span>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Profile Status</div>
+      <div class="kpi-value" style="color:var(--success);font-size:20px;margin-top:8px;">Active</div>
+      <div class="kpi-note">Approved on 15 Jun 2026</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Sessions <span style="color:var(--text-subtle);font-weight:400;">(coming soon)</span></div>
+      <div class="kpi-value">0</div>
+      <div class="kpi-note">Mentor-student matching launching soon</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Hours Contributed</div>
+      <div class="kpi-value">0</div>
+      <div class="kpi-note">Start mentoring to log hours</div>
+    </div>
+  </div>
+
+  <!-- PROFILE SUMMARY -->
+  <div class="profile-card">
+    <div class="profile-card-header">
+      <h2>Your Profile Summary</h2>
+      <button class="edit-btn">Edit Profile</button>
+    </div>
+    <div class="profile-grid">
+      <div class="pf-field">
+        <label>Organization</label>
+        <p>Infosys Limited</p>
+      </div>
+      <div class="pf-field">
+        <label>Role</label>
+        <p>Senior Software Engineer</p>
+      </div>
+      <div class="pf-field">
+        <label>Location</label>
+        <p>Chennai, Tamil Nadu</p>
+      </div>
+      <div class="pf-field">
+        <label>Availability</label>
+        <p>3–5 hrs / week · Online</p>
+      </div>
+      <div class="pf-field">
+        <label>Experience</label>
+        <p>8 years</p>
+      </div>
+      <div class="pf-field">
+        <label>Languages</label>
+        <div class="chip-row">
+          <span class="chip">English</span>
+          <span class="chip">Tamil</span>
+          <span class="chip">Hindi</span>
+        </div>
+      </div>
+      <div class="pf-field" style="grid-column:1/-1;">
+        <label>Mentoring Areas</label>
+        <div class="chip-row">
+          <span class="chip">🎯 Career Guidance</span>
+          <span class="chip">💻 Software Dev</span>
+          <span class="chip">🤖 AI Awareness</span>
+          <span class="chip">🎤 Mock Interviews</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMPACT TEASER -->
+  <div class="impact-teaser">
+    <div class="impact-text">
+      <h3>Student matching is coming soon</h3>
+      <p>We're building the matching engine. You'll be notified the moment you're paired with a student.</p>
+    </div>
+    <div class="impact-badge">Phase 3 — Q4 2026</div>
+  </div>
+
+</div>
+</body>
+</html>

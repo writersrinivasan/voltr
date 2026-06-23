@@ -1,0 +1,265 @@
+<!-- @dsCard group="VOLTR App" viewport="1280x860" name="Admin Dashboard" subtitle="KPI cards, recent registrations table, status distribution" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>VOLTR — Admin Dashboard</title>
+<link rel="stylesheet" href="../../styles.css"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans, system-ui, sans-serif); background: var(--surface-sunken, #F1ECE2); color: var(--text-body, #322E28); line-height: 1.5; display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar { width: 216px; flex-shrink: 0; background: var(--surface-raised, #fff); border-right: 1px solid var(--border-subtle); display: flex; flex-direction: column; }
+  .sidebar-header { height: 56px; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-bottom: 1px solid var(--border-subtle); }
+  .logo-mark { width: 28px; height: 28px; border-radius: 7px; background: var(--brand); color: #fff; font-weight: 800; font-size: 12px; display: grid; place-items: center; }
+  .logo-name { font-size: 13px; font-weight: 700; color: var(--text-strong); }
+  .sidebar-section { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-subtle); padding: 16px 16px 6px; }
+  .nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 14px; margin: 0 6px; border-radius: 8px; font-size: 13px; color: var(--text-muted); cursor: pointer; }
+  .nav-item.active { background: var(--brand-softer, #EAF1EC); color: var(--brand); font-weight: 600; }
+  .nav-item:hover:not(.active) { background: var(--surface-sunken); }
+  .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+  .badge { margin-left: auto; background: var(--danger-soft); color: var(--danger); font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 999px; }
+  .badge.green { background: var(--success-soft); color: var(--success); }
+  .sidebar-footer { margin-top: auto; padding: 16px; border-top: 1px solid var(--border-subtle); }
+  .sidebar-footer .email { font-size: 11px; color: var(--text-subtle); }
+  .sidebar-footer .role { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: 1px; }
+
+  /* MAIN */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .topbar { height: 56px; background: var(--surface-raised); border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; }
+  .topbar-title { font-size: 16px; font-weight: 700; color: var(--text-strong); }
+  .topbar-actions { display: flex; gap: 10px; align-items: center; }
+  .btn-sm { padding: 6px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .btn-primary { background: var(--brand); color: #fff; border: none; }
+  .btn-outline { background: #fff; color: var(--text-body); border: 1.5px solid var(--border-default); }
+  .content { flex: 1; padding: 24px 28px; overflow-y: auto; }
+
+  /* KPI CARDS */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+  .kpi-card { background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 18px 20px; }
+  .kpi-card.highlight { border-color: var(--amber-300); background: var(--amber-100); }
+  .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 500; display: flex; align-items: center; justify-content: space-between; }
+  .kpi-icon { font-size: 18px; }
+  .kpi-value { font-size: 32px; font-weight: 800; color: var(--text-strong); margin-top: 6px; }
+  .kpi-delta { font-size: 11px; color: var(--success); font-weight: 600; margin-top: 4px; }
+
+  /* TWO COLUMN */
+  .two-col { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+
+  /* TABLE CARD */
+  .card { background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: 12px; overflow: hidden; }
+  .card-header { padding: 14px 18px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--text-strong); }
+  .card-link { font-size: 12px; color: var(--brand); font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-subtle); background: var(--surface-sunken); border-bottom: 1px solid var(--border-subtle); text-transform: uppercase; letter-spacing: 0.4px; }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--border-subtle); color: var(--text-body); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface-sunken); }
+  .name-cell strong { display: block; font-weight: 600; color: var(--text-strong); font-size: 13px; }
+  .name-cell span { font-size: 11px; color: var(--text-muted); }
+
+  /* STATUS BADGES */
+  .badge-status { display: inline-flex; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  .badge-pending { background: var(--amber-100); color: var(--amber-700); }
+  .badge-active { background: var(--green-100); color: var(--green-700); }
+  .badge-rejected { background: var(--terracotta-100); color: var(--terracotta-700); }
+  .badge-info { background: var(--azure-100); color: var(--azure-700); }
+
+  .action-link { color: var(--brand); font-size: 12px; font-weight: 600; }
+
+  /* STATUS SUMMARY */
+  .status-list { padding: 16px; }
+  .status-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 2px; border-bottom: 1px solid var(--border-subtle); }
+  .status-row:last-child { border-bottom: none; }
+  .status-row-left { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .status-dot { width: 8px; height: 8px; border-radius: 999px; }
+  .dot-active { background: var(--success); }
+  .dot-pending { background: var(--warning); }
+  .dot-rejected { background: var(--danger); }
+  .dot-deactivated { background: var(--warm-400); }
+  .status-count { font-size: 15px; font-weight: 700; color: var(--text-strong); }
+  .status-pct { font-size: 11px; color: var(--text-subtle); }
+
+  /* MINI BAR CHART */
+  .bar-chart { padding: 16px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .bar-label { font-size: 11px; color: var(--text-muted); width: 100px; flex-shrink: 0; text-align: right; }
+  .bar-track { flex: 1; height: 20px; background: var(--surface-sunken); border-radius: 5px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--brand); border-radius: 5px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; }
+  .bar-fill span { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.85); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo-mark">M</div>
+    <div class="logo-name">VOLTR Admin</div>
+  </div>
+  <nav style="flex:1; padding: 8px 0;">
+    <div class="nav-item active"><span class="nav-icon">📊</span> Dashboard</div>
+    <div class="nav-item"><span class="nav-icon">👥</span> All Volunteers</div>
+    <div class="nav-item"><span class="nav-icon">📋</span> Review Queue <span class="badge">12</span></div>
+    <div class="nav-item"><span class="nav-icon">📧</span> Communications</div>
+    <div class="nav-item"><span class="nav-icon">🔍</span> Audit Log</div>
+    <div class="nav-item"><span class="nav-icon">⚙️</span> Settings</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="email">admin@voltr.org</div>
+    <div class="role">Super Admin</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Dashboard</div>
+    <div class="topbar-actions">
+      <button class="btn-sm btn-outline">Export CSV</button>
+      <button class="btn-sm btn-primary">Review Queue (12)</button>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- KPI CARDS -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Volunteers <span class="kpi-icon">👥</span></div>
+        <div class="kpi-value">248</div>
+        <div class="kpi-delta">↑ 18 this week</div>
+      </div>
+      <div class="kpi-card highlight">
+        <div class="kpi-label">Pending Review <span class="kpi-icon">⏳</span></div>
+        <div class="kpi-value" style="color:var(--amber-700)">12</div>
+        <div style="font-size:11px; color:var(--amber-700); margin-top:4px;">Action needed</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Active Volunteers <span class="kpi-icon">✅</span></div>
+        <div class="kpi-value" style="color:var(--success)">201</div>
+        <div class="kpi-delta">81% of total</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">This Week <span class="kpi-icon">📈</span></div>
+        <div class="kpi-value">+18</div>
+        <div class="kpi-delta">↑ 12% vs last week</div>
+      </div>
+    </div>
+
+    <!-- TWO COLUMNS -->
+    <div class="two-col">
+      <!-- RECENT TABLE -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Recent Registrations</div>
+          <a class="card-link" href="#">View all →</a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Organization</th>
+              <th>Status</th>
+              <th>Joined</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell"><strong>Priya Krishnamurthy</strong><span>Sr. Engineer · Chennai</span></td>
+              <td style="color:var(--text-muted)">Infosys</td>
+              <td><span class="badge-status badge-pending">pending</span></td>
+              <td style="color:var(--text-subtle);font-size:11px;">21 Jun</td>
+              <td><a class="action-link" href="#">View →</a></td>
+            </tr>
+            <tr>
+              <td class="name-cell"><strong>Rahul Mehra</strong><span>HR Manager · Pune</span></td>
+              <td style="color:var(--text-muted)">TCS</td>
+              <td><span class="badge-status badge-active">active</span></td>
+              <td style="color:var(--text-subtle);font-size:11px;">20 Jun</td>
+              <td><a class="action-link" href="#">View →</a></td>
+            </tr>
+            <tr>
+              <td class="name-cell"><strong>Lakshmi Subramaniam</strong><span>Data Scientist · Bengaluru</span></td>
+              <td style="color:var(--text-muted)">Wipro</td>
+              <td><span class="badge-status badge-pending">pending</span></td>
+              <td style="color:var(--text-subtle);font-size:11px;">20 Jun</td>
+              <td><a class="action-link" href="#">View →</a></td>
+            </tr>
+            <tr>
+              <td class="name-cell"><strong>Arjun Venkatesh</strong><span>Product Manager · Hyderabad</span></td>
+              <td style="color:var(--text-muted)">Zepto</td>
+              <td><span class="badge-status badge-active">active</span></td>
+              <td style="color:var(--text-subtle);font-size:11px;">19 Jun</td>
+              <td><a class="action-link" href="#">View →</a></td>
+            </tr>
+            <tr>
+              <td class="name-cell"><strong>Divya Nair</strong><span>Frontend Dev · Kochi</span></td>
+              <td style="color:var(--text-muted)">Freshworks</td>
+              <td><span class="badge-status badge-info">awaiting_info</span></td>
+              <td style="color:var(--text-subtle);font-size:11px;">18 Jun</td>
+              <td><a class="action-link" href="#">View →</a></td>
+            </tr>
+            <tr>
+              <td class="name-cell"><strong>Karthik Raman</strong><span>DevOps Eng · Chennai</span></td>
+              <td style="color:var(--text-muted)">HCLTech</td>
+              <td><span class="badge-status badge-active">active</span></td>
+              <td style="color:var(--text-subtle);font-size:11px;">17 Jun</td>
+              <td><a class="action-link" href="#">View →</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+
+        <!-- STATUS SUMMARY -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">Status Breakdown</div></div>
+          <div class="status-list">
+            <div class="status-row">
+              <div class="status-row-left"><div class="status-dot dot-active"></div>Active</div>
+              <div style="text-align:right"><div class="status-count">201</div><div class="status-pct">81%</div></div>
+            </div>
+            <div class="status-row">
+              <div class="status-row-left"><div class="status-dot dot-pending"></div>Pending</div>
+              <div style="text-align:right"><div class="status-count">12</div><div class="status-pct">5%</div></div>
+            </div>
+            <div class="status-row">
+              <div class="status-row-left"><div class="status-dot" style="background:var(--azure-500)"></div>Awaiting Info</div>
+              <div style="text-align:right"><div class="status-count">8</div><div class="status-pct">3%</div></div>
+            </div>
+            <div class="status-row">
+              <div class="status-row-left"><div class="status-dot dot-rejected"></div>Rejected</div>
+              <div style="text-align:right"><div class="status-count">19</div><div class="status-pct">8%</div></div>
+            </div>
+            <div class="status-row">
+              <div class="status-row-left"><div class="status-dot dot-deactivated"></div>Deactivated</div>
+              <div style="text-align:right"><div class="status-count">8</div><div class="status-pct">3%</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOP SKILLS -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">Top Skills</div></div>
+          <div class="bar-chart">
+            <div class="bar-row"><div class="bar-label">Software Dev</div><div class="bar-track"><div class="bar-fill" style="width:78%"><span>78%</span></div></div></div>
+            <div class="bar-row"><div class="bar-label">Communication</div><div class="bar-track"><div class="bar-fill" style="width:65%"><span>65%</span></div></div></div>
+            <div class="bar-row"><div class="bar-label">Data Science</div><div class="bar-track"><div class="bar-fill" style="width:52%"><span>52%</span></div></div></div>
+            <div class="bar-row"><div class="bar-label">Leadership</div><div class="bar-track"><div class="bar-fill" style="width:44%"><span>44%</span></div></div></div>
+            <div class="bar-row"><div class="bar-label">AI / ML</div><div class="bar-track"><div class="bar-fill" style="width:38%"><span>38%</span></div></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

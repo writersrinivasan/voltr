@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>VOLTR — Stakeholder Presentation 2026</title>
+<style>
+/* ── Reset & Base ─────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green-50:#EAF1EC;--green-100:#D6E5DB;--green-200:#ABC9B6;
+  --green-300:#7EAC91;--green-400:#55906F;--green-500:#3B6B53;
+  --green-600:#2F5743;--green-700:#244334;--green-800:#1A3127;--green-900:#11211B;
+  --warm-50:#F7F4ED;--warm-100:#F1ECE2;--warm-150:#E9E3D7;
+  --warm-200:#DED7C9;--warm-300:#C8C0AF;--warm-400:#A89F8E;
+  --warm-500:#877E6F;--warm-600:#685F53;--warm-700:#4C453C;
+  --warm-800:#322E28;--warm-900:#201D18;
+  --amber-100:#F8E9CC;--amber-300:#ECC983;--amber-500:#D8A24A;--amber-700:#A6772C;
+  --terra-100:#F6DED4;--terra-500:#C75B39;--terra-700:#9A4026;
+  --azure-100:#D9E2F0;--azure-500:#41608C;
+  --font:'Inter var',Inter,system-ui,sans-serif;
+}
+html,body{height:100%;overflow:hidden;background:#000;font-family:var(--font)}
+
+/* ── SLIDES CONTAINER ─────────────────────────────────────────── */
+.deck{width:100vw;height:100vh;position:relative;overflow:hidden}
+.slide{
+  position:absolute;inset:0;width:100%;height:100%;
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.35s ease;
+}
+.slide.active{opacity:1;pointer-events:all}
+
+/* ── CONTROLS ─────────────────────────────────────────────────── */
+.controls{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:12px;z-index:100;
+  background:rgba(32,29,24,0.72);backdrop-filter:blur(8px);
+  border-radius:999px;padding:8px 16px;
+}
+.ctrl-btn{
+  width:32px;height:32px;border-radius:999px;border:none;cursor:pointer;
+  background:transparent;color:rgba(255,255,255,0.7);font-size:16px;
+  display:grid;place-items:center;transition:background 0.15s,color 0.15s;
+}
+.ctrl-btn:hover{background:rgba(255,255,255,0.12);color:#fff}
+.ctrl-btn:disabled{opacity:0.3;cursor:default}
+.slide-counter{font-size:12px;color:rgba(255,255,255,0.6);min-width:48px;text-align:center;font-variant-numeric:tabular-nums}
+.progress-dots{display:flex;gap:5px;align-items:center}
+.dot{width:5px;height:5px;border-radius:999px;background:rgba(255,255,255,0.25);cursor:pointer;transition:all 0.2s}
+.dot.active-dot{background:#fff;width:16px}
+
+/* ── SHARED SLIDE ELEMENTS ────────────────────────────────────── */
+.slide-label{
+  font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.slide-title{font-weight:800;letter-spacing:-0.5px;line-height:1.1}
+.slide-body{font-size:17px;line-height:1.65}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:999px;font-size:12px;font-weight:700;}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE 1 — TITLE
+══════════════════════════════════════════════════════════════ */
+#s1{
+  background:var(--warm-900);
+  justify-content:center;align-items:center;
+  padding:64px;text-align:center;
+  background-image:radial-gradient(ellipse 60% 40% at 50% 60%,rgba(59,107,83,0.28) 0%,transparent 70%);
+}
+#s1 .logo-lockup{
+  display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:48px;
+}
+#s1 .logo-mark{
+  width:52px;height:52px;border-radius:14px;
+  background:var(--green-500);color:#fff;font-weight:900;font-size:22px;
+  display:grid;place-items:center;
+}
+#s1 .logo-name{font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.5px}
+#s1 h1{font-size:58px;font-weight:900;color:#fff;letter-spacing:-2px;line-height:1.05;max-width:800px}
+#s1 h1 span{color:var(--green-300)}
+#s1 .deck-sub{font-size:19px;color:var(--warm-400);margin-top:18px;max-width:580px;line-height:1.5}
+#s1 .deck-meta{display:flex;gap:20px;justify-content:center;margin-top:44px}
+#s1 .deck-meta span{font-size:13px;color:var(--warm-500);padding:6px 16px;border:1px solid rgba(255,255,255,0.1);border-radius:999px}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE 2 — PROBLEM
+══════════════════════════════════════════════════════════════ */
+#s2{background:var(--warm-50);padding:64px 80px;justify-content:center}
+#s2 .slide-label{color:var(--terra-500)}
+#s2 .slide-title{font-size:44px;color:var(--warm-900);max-width:640px;margin-bottom:40px}
+#s2 .problem-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+#s2 .prob-card{background:#fff;border:1px solid var(--warm-150);border-radius:16px;padding:24px;border-top:3px solid var(--terra-500)}
+#s2 .prob-icon{font-size:32px;margin-bottom:12px}
+#s2 .prob-card h3{font-size:16px;font-weight:700;color:var(--warm-900);margin-bottom:8px}
+#s2 .prob-card p{font-size:14px;color:var(--warm-600);line-height:1.6}
+#s2 .stat-strip{display:flex;gap:32px;margin-top:32px;padding:20px 24px;background:var(--terra-100);border-radius:12px}
+#s2 .stat-item strong{display:block;font-size:28px;font-weight:800;color:var(--terra-700)}
+#s2 .stat-item span{font-size:12px;color:var(--terra-500)}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE 3 — SOLUTION
+══════════════════════════════════════════════════════════════ */
+#s3{
+  background:var(--green-900);
+  padding:64px 80px;justify-content:center;
+  background-image:radial-gradient(ellipse 50% 50% at 80% 50%,rgba(59,107,83,0.35) 0%,transparent 70%);
+}
+#s3 .slide-label{color:var(--green-300)}
+#s3 .slide-title{font-size:46px;color:#fff;max-width:560px;margin-bottom:16px}
+#s3 .slide-body{color:var(--green-200);max-width:520px;margin-bottom:40px;font-size:16px}
+#s3 .solution-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:720px}
+#s3 .sol-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px 22px}
+#s3 .sol-card h3{font-size:15px;font-weight:700;color:#fff;margin-bottom:6px}
+#s3 .sol-card p{font-size:13px;color:var(--green-200);line-height:1.6}
+#s3 .sol-icon{font-size:24px;margin-bottom:10px}
+#s3 .vision-quote{
+  margin-top:32px;max-width:600px;padding:20px 24px;
+  border-left:3px solid var(--green-400);background:rgba(255,255,255,0.04);border-radius:0 10px 10px 0;
+}
+#s3 .vision-quote p{font-size:17px;font-style:italic;color:var(--green-100);line-height:1.6}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE 4 — HOW IT WORKS
+══════════════════════════════════════════════════════════════ */
+#s4{background:#fff;padding:64px 80px;justify-content:center}
+#s4 .slide-label{color:var(--green-500)}
+#s4 .slide-title{font-size:42px;color:var(--warm-900);margin-bottom:44px}
+#s4 .flow{display:flex;align-items:flex-start;gap:0}
+#s4 .flow-step{flex:1;text-align:center;padding:0 12px;position:relative}
+#s4 .flow-step:not(:last-child)::after{
+  content:'';position:absolute;top:26px;right:-8px;width:16px;height:2px;
+  background:var(--warm-200);z-index:1;
+}
+#s4 .step-num{width:52px;height:52px;border-radius:14px;background:var(--green-50);
+  color:var(--green-600);font-size:18px;font-weight:800;display:grid;place-items:center;
+  margin:0 auto 14px;border:2px solid var(--green-200)}
+#s4 .flow-step h3{font-size:15px;font-weight:700;color:var(--warm-900);margin-bottom:8px}
+#s4 .flow-step p{font-size:13px;color:var(--warm-600);line-height:1.6}
+#s4 .flow-step .who{display:inline-block;margin-top:10px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700}
+#s4 .who-vol{background:var(--green-100);color:var(--green-700)}
+#s4 .who-admin{background:var(--amber-100);color:var(--amber-700)}
+#s4 .who-both{background:var(--azure-100);color:var(--azure-500)}
+#s4 .areas{display:flex;flex-wrap:wrap;gap:8px;margin-top:36px;justify-content:center}
+#s4 .area-pill{padding:6px 16px;border-radius:999px;background:var(--green-50);border:1.5px solid var(--green-200);font-size:13px;font-weight:600;color:var(--green-700)}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE 5 — MVP FEATURES
+══════════════════════════════════════════════════════════════ */
+#s5{background:var(--warm-50);padding:64px 80px;justify-content:center}
+#s5 .slide-label{color:var(--green-500)}
+#s5 .slide-title{font-size:40px;color:var(--warm-900);margin-bottom:36px}
+#s5 .feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+#s5 .feat-col h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:14px;padding:6px 12px;border-radius:8px;display:inline-block}
+#s5 .feat-col.volunteer h3{background:var(--green-100);color:var(--green-700)}
+#s5 .feat-col.admin h3{background:var(--amber-100);color:var(--amber-700)}
+#s5 .feat-list{list-style:none;display:flex;flex-direction:column;gap:9px}
+#s5 .feat-list li{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--warm-700)}
+#s5 .feat-list li::before{content:'✓';color:var(--green-500);font-weight:700;flex-shrink:0;margin-top:1px}
+#s5 .scope-note{margin-top:28px;padding:14px 18px;background:#fff;border:1px solid var(--warm-200);border-radius:10px;font-size:13px;color:var(--warm-600);display:flex;gap:10px;align-items:flex-start}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE 6 — TECHNOLOGY
+══════════════════════════════════════════════════════════════ */
+#s6{background:var(--warm-900);padding:64px 80px;justify-content:center}
+#s6 .slide-label{color:var(--green-300)}
+#s6 .slide-title{font-size:40px;color:#fff;margin-bottom:36px}
+#s6 .tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:840px}
+#s6 .tech-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px 22px}
+#s6 .tech-layer{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--green-400);margin-bottom:10px}
+#s6 .tech-card h3{font-size:17px;font-weight:700;color:#fff;margin-bottom:6px}
+#s6 .tech-card p{font-size:13px;color:var(--warm-400);line-height:1.5}
+#s6 .tech-card .sub{font-size:12px;color:var(--warm-500);margin-top:4px}
+#s6 .ai-banner{grid-column:1/-1;display:flex;align-items:center;gap:20px;background:var(--green-800);border:1px solid var(--green-700);border-radius:14px;padding:18px 24px}
+#s6 .ai-icon{font-size:32px;flex-shrink:0}
+#s6 .ai-text h3{font-size:16px;font-weight:700;color:#fff}
+#s6 .ai-text p{font-size:13px;color:var(--green-300);margin-top:4px}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE 7 — ROADMAP
+══════════════════════════════════════════════════════════════ */
+#s7{background:#fff;padding:64px 80px;justify-content:center}
+#s7 .slide-label{color:var(--green-500)}
+#s7 .slide-title{font-size:40px;color:var(--warm-900);margin-bottom:44px}
+#s7 .timeline{display:flex;gap:0;position:relative}
+#s7 .timeline::before{content:'';position:absolute;left:24px;top:24px;right:24px;height:2px;background:var(--warm-150);z-index:0}
+#s7 .phase{flex:1;position:relative;padding-top:52px;padding-right:12px}
+#s7 .phase-dot{
+  position:absolute;top:12px;left:0;width:28px;height:28px;border-radius:999px;
+  border:2px solid var(--warm-200);background:#fff;z-index:1;
+  display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--warm-500);
+}
+#s7 .phase.current .phase-dot{background:var(--green-500);border-color:var(--green-500);color:#fff;box-shadow:0 0 0 4px var(--green-100)}
+#s7 .phase.soon .phase-dot{background:var(--warm-800);border-color:var(--warm-700);color:#fff}
+#s7 .phase-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+#s7 .phase.current .phase-label{color:var(--green-600)}
+#s7 .phase.soon .phase-label{color:var(--warm-600)}
+#s7 .phase.future .phase-label{color:var(--warm-400)}
+#s7 .phase h3{font-size:14px;font-weight:700;color:var(--warm-900);margin-bottom:6px}
+#s7 .phase.future h3{color:var(--warm-400)}
+#s7 .phase ul{list-style:none;display:flex;flex-direction:column;gap:4px}
+#s7 .phase ul li{font-size:12px;color:var(--warm-600);display:flex;gap:6px;align-items:baseline}
+#s7 .phase.future ul li{color:var(--warm-400)}
+#s7 .phase ul li::before{content:'·';flex-shrink:0}
+#s7 .phase-time{margin-top:12px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;display:inline-block}
+#s7 .phase.current .phase-time{background:var(--green-100);color:var(--green-700)}
+#s7 .phase.soon .phase-time{background:var(--warm-100);color:var(--warm-700)}
+#s7 .phase.future .phase-time{background:var(--warm-50);color:var(--warm-500);border:1px solid var(--warm-150)}
+#s7 .budget-note{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap}
+#s7 .budget-pill{padding:6px 14px;background:var(--warm-50);border:1px solid var(--warm-150);border-radius:999px;font-size:12px;color:var(--warm-600)}
+#s7 .budget-pill strong{color:var(--warm-900)}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE 8 — IMPACT & KPIs
+══════════════════════════════════════════════════════════════ */
+#s8{background:var(--green-900);padding:64px 80px;justify-content:center;
+  background-image:radial-gradient(ellipse 60% 50% at 20% 50%,rgba(59,107,83,0.3) 0%,transparent 70%)}
+#s8 .slide-label{color:var(--green-300)}
+#s8 .slide-title{font-size:40px;color:#fff;margin-bottom:36px}
+#s8 .kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:840px}
+#s8 .kpi-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:22px 24px}
+#s8 .kpi-category{font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--green-400);margin-bottom:10px}
+#s8 .kpi-num{font-size:36px;font-weight:900;color:#fff;line-height:1}
+#s8 .kpi-unit{font-size:14px;color:var(--green-300);margin-top:4px;font-weight:500}
+#s8 .kpi-note{font-size:12px;color:var(--warm-400);margin-top:6px}
+#s8 .impact-banner{
+  grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;
+  background:var(--green-800);border:1px solid var(--green-600);border-radius:14px;padding:18px 24px;margin-top:4px}
+#s8 .impact-banner p{font-size:15px;color:var(--green-100)}
+#s8 .impact-banner strong{color:#fff}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE 9 — SOCIAL IMPACT
+══════════════════════════════════════════════════════════════ */
+#s9{background:var(--warm-50);padding:64px 80px;justify-content:center}
+#s9 .slide-label{color:var(--green-500)}
+#s9 .slide-title{font-size:40px;color:var(--warm-900);margin-bottom:36px}
+#s9 .impact-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:28px}
+#s9 .impact-card{background:#fff;border:1px solid var(--warm-150);border-radius:14px;padding:22px 20px}
+#s9 .impact-card h3{font-size:15px;font-weight:700;color:var(--warm-900);margin-bottom:10px}
+#s9 .impact-card p{font-size:13px;color:var(--warm-600);line-height:1.6}
+#s9 .partner-types{display:flex;gap:10px;flex-wrap:wrap}
+#s9 .partner-tag{padding:8px 18px;border-radius:999px;border:2px solid var(--green-200);background:var(--green-50);font-size:13px;font-weight:600;color:var(--green-700)}
+#s9 .yoto-box{margin-top:20px;padding:20px 24px;background:var(--warm-900);border-radius:14px;display:flex;align-items:center;justify-content:space-between}
+#s9 .yoto-box h3{font-size:16px;font-weight:700;color:#fff}
+#s9 .yoto-box p{font-size:13px;color:var(--warm-400);margin-top:4px;max-width:400px}
+#s9 .yoto-badge{padding:8px 18px;background:var(--green-700);border-radius:999px;font-size:12px;font-weight:700;color:var(--green-200)}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE 10 — THE ASK
+══════════════════════════════════════════════════════════════ */
+#s10{
+  background:var(--warm-900);
+  padding:64px 80px;justify-content:center;
+  background-image:radial-gradient(ellipse 70% 50% at 50% 100%,rgba(59,107,83,0.25) 0%,transparent 60%);
+}
+#s10 .slide-label{color:var(--green-300)}
+#s10 .slide-title{font-size:44px;color:#fff;margin-bottom:36px;max-width:640px}
+#s10 .ask-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:36px}
+#s10 .ask-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:24px;border-top:3px solid}
+#s10 .ask-card.vol{border-top-color:var(--green-400)}
+#s10 .ask-card.ngo{border-top-color:var(--amber-500)}
+#s10 .ask-card.dev{border-top-color:var(--azure-500)}
+#s10 .ask-card h3{font-size:15px;font-weight:700;color:#fff;margin-bottom:10px}
+#s10 .ask-card ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+#s10 .ask-card ul li{font-size:13px;color:var(--warm-400);display:flex;gap:8px;align-items:baseline}
+#s10 .ask-card ul li::before{content:'→';flex-shrink:0;font-weight:700}
+#s10 .ask-card.vol ul li::before{color:var(--green-400)}
+#s10 .ask-card.ngo ul li::before{color:var(--amber-500)}
+#s10 .ask-card.dev ul li::before{color:var(--azure-500)}
+#s10 .cta-strip{display:flex;align-items:center;gap:16px}
+#s10 .cta-btn{padding:14px 32px;background:var(--green-500);color:#fff;border-radius:10px;font-size:16px;font-weight:700;border:none;cursor:pointer}
+#s10 .cta-sub{font-size:14px;color:var(--warm-500)}
+#s10 .cta-sub a{color:var(--green-300)}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE 11 — CLOSING
+══════════════════════════════════════════════════════════════ */
+#s11{
+  background:var(--green-900);
+  justify-content:center;align-items:center;text-align:center;padding:80px;
+  background-image:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(59,107,83,0.4) 0%,transparent 70%);
+}
+#s11 .logo-lockup{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:40px}
+#s11 .logo-mark{width:60px;height:60px;border-radius:16px;background:var(--green-500);color:#fff;font-weight:900;font-size:26px;display:grid;place-items:center}
+#s11 .logo-name{font-size:32px;font-weight:800;color:#fff}
+#s11 h2{font-size:52px;font-weight:900;color:#fff;letter-spacing:-1.5px;max-width:700px;line-height:1.05}
+#s11 h2 span{color:var(--green-300)}
+#s11 .tagline{font-size:18px;color:var(--green-200);margin-top:16px}
+#s11 .contact{margin-top:48px;display:flex;gap:28px;justify-content:center;flex-wrap:wrap}
+#s11 .contact-item{font-size:14px;color:var(--warm-400)}
+#s11 .contact-item strong{color:var(--green-300);display:block;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:2px}
+#s11 .slide-num-badge{position:absolute;bottom:20px;right:24px;font-size:11px;color:var(--green-700)}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+<!-- ═══ SLIDE 1 · TITLE ═══ -->
+<div class="slide active" id="s1">
+  <div class="logo-lockup">
+    <div class="logo-mark">M</div>
+    <div class="logo-name">VOLTR</div>
+  </div>
+  <h1>Bridging the Gap Between<br/><span>Talent and Opportunity</span></h1>
+  <p class="deck-sub">An AI-powered platform connecting volunteer professionals with rural college students to drive measurable improvements in employability and career readiness.</p>
+  <div class="deck-meta">
+    <span>Stakeholder Presentation</span>
+    <span>June 2026</span>
+    <span>Confidential</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 2 · PROBLEM ═══ -->
+<div class="slide" id="s2">
+  <div class="slide-label">The Problem</div>
+  <h2 class="slide-title">Rural students are<br/>structurally disadvantaged</h2>
+  <div class="problem-grid">
+    <div class="prob-card">
+      <div class="prob-icon">🚫</div>
+      <h3>No Industry Access</h3>
+      <p>Rural college students rarely meet working professionals. Career guidance comes from textbooks, not experience.</p>
+    </div>
+    <div class="prob-card">
+      <div class="prob-icon">🗣️</div>
+      <h3>Communication Gap</h3>
+      <p>Poor English fluency and lack of soft-skills coaching leaves students unprepared for job interviews and corporate environments.</p>
+    </div>
+    <div class="prob-card">
+      <div class="prob-icon">💻</div>
+      <h3>Tech Blindspot</h3>
+      <p>Zero exposure to AI, cloud computing, and modern software tools — skills that are now table-stakes in any technology career.</p>
+    </div>
+  </div>
+  <div class="stat-strip">
+    <div class="stat-item"><strong>63%</strong><span>of rural graduates unemployed within 6 months of degree</span></div>
+    <div class="stat-item"><strong>4%</strong><span>of rural students have ever spoken to an industry professional</span></div>
+    <div class="stat-item"><strong>₹0</strong><span>average career counselling budget in rural colleges</span></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 3 · SOLUTION ═══ -->
+<div class="slide" id="s3">
+  <div class="slide-label">Our Solution</div>
+  <h2 class="slide-title">VOLTR is the<br/>bridge they need</h2>
+  <p class="slide-body">A structured, volunteer-driven mentoring ecosystem — powered by AI — that connects professionals directly with rural students through a trusted, managed platform.</p>
+  <div class="solution-cols">
+    <div class="sol-card">
+      <div class="sol-icon">🙋</div>
+      <h3>Volunteer Registration Portal</h3>
+      <p>Professionals register in 5 minutes. We verify, onboard, and match them to students who need their specific expertise.</p>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon">⚙️</div>
+      <h3>Admin Management Platform</h3>
+      <p>Full review workflow, communications center, audit logs, and reporting for program coordinators.</p>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon">🤝</div>
+      <h3>Mentor–Student Matching</h3>
+      <p>AI-powered matching based on skills, goals, schedule, and language — so every session has maximum impact.</p>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon">📊</div>
+      <h3>Impact Measurement</h3>
+      <p>Pre/post assessments, session tracking, and a live impact dashboard for donors and institutional partners.</p>
+    </div>
+  </div>
+  <div class="vision-quote">
+    <p>"To build a future where geography is no longer a barrier to opportunity."</p>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 4 · HOW IT WORKS ═══ -->
+<div class="slide" id="s4">
+  <div class="slide-label">How It Works</div>
+  <h2 class="slide-title">Simple for volunteers.<br/>Transformative for students.</h2>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="step-num">01</div>
+      <h3>Volunteer Registers</h3>
+      <p>5-step form: personal info, professional background, skills, availability, motivation.</p>
+      <span class="who who-vol">Volunteer</span>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">02</div>
+      <h3>Admin Reviews</h3>
+      <p>Team reviews the profile within 48 hours. AI pre-screens for completeness and quality signals.</p>
+      <span class="who who-admin">Admin</span>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">03</div>
+      <h3>Approved & Onboarded</h3>
+      <p>Automated approval email. Volunteer accesses their dashboard and profile.</p>
+      <span class="who who-both">Platform</span>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">04</div>
+      <h3>Matched to Student</h3>
+      <p>AI matches based on skills, goals, schedule, and language preference.</p>
+      <span class="who who-both">AI + Admin</span>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">05</div>
+      <h3>Sessions Begin</h3>
+      <p>Online 1-on-1 sessions via video call. Feedback collected. Impact tracked.</p>
+      <span class="who who-both">Volunteer + Student</span>
+    </div>
+  </div>
+  <div class="areas">
+    <span class="area-pill">🎯 Career Guidance</span>
+    <span class="area-pill">💻 Software Dev</span>
+    <span class="area-pill">🤖 AI Awareness</span>
+    <span class="area-pill">🗣️ Soft Skills</span>
+    <span class="area-pill">🎤 Mock Interviews</span>
+    <span class="area-pill">📄 Resume Building</span>
+    <span class="area-pill">🚀 Entrepreneurship</span>
+    <span class="area-pill">🏭 Industry Insights</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 5 · MVP FEATURES ═══ -->
+<div class="slide" id="s5">
+  <div class="slide-label">Product — Phase 1 MVP</div>
+  <h2 class="slide-title">Everything needed to<br/>launch and scale volunteer intake</h2>
+  <div class="feat-grid">
+    <div class="feat-col volunteer">
+      <h3>Volunteer Portal</h3>
+      <ul class="feat-list">
+        <li>5-step multi-page registration wizard</li>
+        <li>Email verification and account confirmation</li>
+        <li>Volunteer dashboard with status tracking</li>
+        <li>Profile editor — update skills and availability</li>
+        <li>Real-time application status visibility</li>
+        <li>Notification preferences (email / SMS)</li>
+      </ul>
+    </div>
+    <div class="feat-col admin">
+      <h3>Admin Portal</h3>
+      <ul class="feat-list">
+        <li>KPI dashboard with growth charts</li>
+        <li>Review queue with approve / reject / flag actions</li>
+        <li>Volunteer search and filter (50+ parameters)</li>
+        <li>Email communication center with audience targeting</li>
+        <li>Full audit log of all admin actions</li>
+        <li>Role management (Super Admin, Admin, Reviewer)</li>
+        <li>CSV / PDF data export</li>
+      </ul>
+    </div>
+  </div>
+  <div class="scope-note">
+    <span>📌</span>
+    <span><strong>MVP Scope:</strong> Volunteer portal + Admin portal. Student matching, donations, AI engine, and YOTO physical center are Phase 2–5 deliverables.</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 6 · TECHNOLOGY ═══ -->
+<div class="slide" id="s6">
+  <div class="slide-label">Technology</div>
+  <h2 class="slide-title">Modern, secure, and<br/>built to scale</h2>
+  <div class="tech-grid">
+    <div class="tech-card">
+      <div class="tech-layer">Frontend</div>
+      <h3>Next.js 14 + Tailwind</h3>
+      <p>Server-side rendering for SEO. Composable UI with shadcn/ui and YOTO design tokens.</p>
+      <div class="sub">React Hook Form · Zod · TanStack Query</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-layer">Backend</div>
+      <h3>Node.js + Drizzle ORM</h3>
+      <p>Type-safe REST API. JWT authentication with 15-min access tokens and 30-day refresh rotation.</p>
+      <div class="sub">PostgreSQL 16 · Redis · BullMQ jobs</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-layer">Infrastructure</div>
+      <h3>Cloud-Native</h3>
+      <p>Containerised with Docker. GitHub Actions CI/CD. Sentry error tracking. Daily encrypted backups.</p>
+      <div class="sub">Render.com (MVP) → AWS (scale)</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-layer">Security</div>
+      <h3>DPDP Act Compliant</h3>
+      <p>bcrypt passwords · TLS 1.2+ · AES-256 at rest · OWASP Top 10 mitigated · 2FA for admins.</p>
+      <div class="sub">Penetration test before launch</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-layer">Email</div>
+      <h3>Resend + Razorpay</h3>
+      <p>Transactional email via Resend. Payment gateway via Razorpay (Phase 2 — donations).</p>
+      <div class="sub">Batch campaigns · Delivery tracking</div>
+    </div>
+    <div class="tech-card ai-banner" style="display:flex;">
+      <div class="ai-icon">🤖</div>
+      <div class="ai-text">
+        <h3>Anthropic Claude API — AI Engine</h3>
+        <p>Profile completeness scoring · Motivation quality analysis · Mentor-student matching · Mock interview bot · Resume analyzer · Impact sentiment analysis (Phase 2–4)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 7 · ROADMAP ═══ -->
+<div class="slide" id="s7">
+  <div class="slide-label">Phased Roadmap</div>
+  <h2 class="slide-title">Deliver value fast.<br/>Scale deliberately.</h2>
+  <div class="timeline">
+    <div class="phase current">
+      <div class="phase-dot">1</div>
+      <div class="phase-label">Now — MVP</div>
+      <h3>Volunteer Portal</h3>
+      <ul>
+        <li>Registration wizard</li>
+        <li>Admin dashboard</li>
+        <li>Review & approval</li>
+        <li>Communication centre</li>
+        <li>Audit logging</li>
+      </ul>
+      <span class="phase-time">Months 1–3 · ₹3–5L</span>
+    </div>
+    <div class="phase soon">
+      <div class="phase-dot">2</div>
+      <div class="phase-label">Phase 2</div>
+      <h3>Donation Module</h3>
+      <ul>
+        <li>Donor intent survey</li>
+        <li>Razorpay integration</li>
+        <li>80G tax receipts</li>
+        <li>Donor portal</li>
+      </ul>
+      <span class="phase-time">Months 4–5 · ₹1–2L</span>
+    </div>
+    <div class="phase soon">
+      <div class="phase-dot">3</div>
+      <div class="phase-label">Phase 3</div>
+      <h3>Student Platform</h3>
+      <ul>
+        <li>Student registration</li>
+        <li>AI mentor matching</li>
+        <li>Session scheduling</li>
+        <li>Video integration</li>
+        <li>Progress tracking</li>
+      </ul>
+      <span class="phase-time">Months 6–9 · ₹5–8L</span>
+    </div>
+    <div class="phase future">
+      <div class="phase-dot">4</div>
+      <div class="phase-label">Phase 4</div>
+      <h3>AI Engine</h3>
+      <ul>
+        <li>Resume analyzer</li>
+        <li>Mock interview bot</li>
+        <li>Career path AI</li>
+        <li>Impact dashboard</li>
+      </ul>
+      <span class="phase-time">Months 10–14 · ₹4–6L</span>
+    </div>
+    <div class="phase future">
+      <div class="phase-dot">5</div>
+      <div class="phase-label">Phase 5</div>
+      <h3>YOTO Centre</h3>
+      <ul>
+        <li>Physical centre mgmt</li>
+        <li>Offline events</li>
+        <li>Blended learning</li>
+        <li>Certificates</li>
+      </ul>
+      <span class="phase-time">Month 15+ · ₹8–15L</span>
+    </div>
+  </div>
+  <div class="budget-note">
+    <span class="budget-pill">MVP build: <strong>₹3–5 Lakhs</strong></span>
+    <span class="budget-pill">Full 5-phase: <strong>₹21–36 Lakhs</strong></span>
+    <span class="budget-pill">Cost per student: <strong>≤ ₹500</strong></span>
+    <span class="budget-pill">Cost per volunteer onboarded: <strong>≤ ₹200</strong></span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 8 · KPIs ═══ -->
+<div class="slide" id="s8">
+  <div class="slide-label">Success Metrics</div>
+  <h2 class="slide-title">How we measure<br/>what matters</h2>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-category">Year 1 Target</div>
+      <div class="kpi-num">500</div>
+      <div class="kpi-unit">Volunteers Registered</div>
+      <div class="kpi-note">≥ 80% approval rate · ≤ 48hr review time</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-category">Year 2 Target</div>
+      <div class="kpi-num">1,000</div>
+      <div class="kpi-unit">Students Mentored</div>
+      <div class="kpi-note">≥ 2 sessions per volunteer per month</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-category">Student Outcome</div>
+      <div class="kpi-num">200</div>
+      <div class="kpi-unit">Jobs / Internships Placed</div>
+      <div class="kpi-note">≥ 40% self-reported employability improvement</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-category">Volunteer Quality</div>
+      <div class="kpi-num">≥ 50</div>
+      <div class="kpi-unit">Volunteer NPS</div>
+      <div class="kpi-note">Post-session survey · 6-month retention ≥ 70%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-category">Platform Health</div>
+      <div class="kpi-num">99.5%</div>
+      <div class="kpi-unit">Platform Uptime SLA</div>
+      <div class="kpi-note">Monitored 24/7 · 15-min recovery target</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-category">Financial (Phase 2)</div>
+      <div class="kpi-num">₹1L</div>
+      <div class="kpi-unit">Monthly Recurring Donations</div>
+      <div class="kpi-note">By Month 12 · 15% donor conversion from volunteers</div>
+    </div>
+    <div class="impact-banner">
+      <p>Confidence score improvement through mock interview AI: <strong>≥ 30%</strong> &nbsp;·&nbsp; Resume quality score improvement: <strong>≥ 50%</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 9 · SOCIAL IMPACT ═══ -->
+<div class="slide" id="s9">
+  <div class="slide-label">Why It Matters</div>
+  <h2 class="slide-title">Built for maximum<br/>social impact</h2>
+  <div class="impact-cols">
+    <div class="impact-card">
+      <h3>🎓 For Students</h3>
+      <p>Direct access to industry mentors they'd never otherwise meet. Real career guidance, mock interviews, and technical skill-building — all free.</p>
+    </div>
+    <div class="impact-card">
+      <h3>🤲 For Volunteers</h3>
+      <p>A structured, meaningful way to give back. Fully managed — no cold outreach, no coordination overhead. Just mentoring.</p>
+    </div>
+    <div class="impact-card">
+      <h3>🏫 For Institutions</h3>
+      <p>Colleges and NGOs get an end-to-end platform to connect their students with professionals — with tracking and impact reporting built in.</p>
+    </div>
+  </div>
+  <div style="margin-bottom:16px;">
+    <div style="font-size:12px;font-weight:700;color:var(--warm-500);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Designed for partnership with</div>
+    <div class="partner-types">
+      <span class="partner-tag">IT Companies (CSR)</span>
+      <span class="partner-tag">Engineering Colleges</span>
+      <span class="partner-tag">NGOs & Social Orgs</span>
+      <span class="partner-tag">Government Schemes</span>
+      <span class="partner-tag">Education Foundations</span>
+    </div>
+  </div>
+  <div class="yoto-box">
+    <div>
+      <h3>YOTO — The Physical Frontier</h3>
+      <p>Phase 5 brings a physical rural software development and training centre — blending online mentoring with in-person bootcamps, internships, and infrastructure.</p>
+    </div>
+    <div class="yoto-badge">Phase 5 · 2028</div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 10 · THE ASK ═══ -->
+<div class="slide" id="s10">
+  <div class="slide-label">Partnership Opportunities</div>
+  <h2 class="slide-title">Join us in building<br/>what matters</h2>
+  <div class="ask-grid">
+    <div class="ask-card vol">
+      <h3>🙋 Volunteer Professionals</h3>
+      <ul>
+        <li>Register as a mentor volunteer</li>
+        <li>Commit 2–5 hrs/week online</li>
+        <li>Share your profile with colleagues</li>
+        <li>Participate in YOTO offline (future)</li>
+      </ul>
+    </div>
+    <div class="ask-card ngo">
+      <h3>🏫 NGOs & Colleges</h3>
+      <ul>
+        <li>Partner to onboard your students</li>
+        <li>Co-brand the mentoring programme</li>
+        <li>Access impact reports for your institution</li>
+        <li>Contribute coordinators as Reviewers</li>
+      </ul>
+    </div>
+    <div class="ask-card dev">
+      <h3>💼 Sponsors & Donors</h3>
+      <ul>
+        <li>Fund the MVP build (₹3–5L)</li>
+        <li>CSR programme alignment</li>
+        <li>Named partnership on platform</li>
+        <li>Quarterly impact reporting</li>
+      </ul>
+    </div>
+  </div>
+  <div class="cta-strip">
+    <button class="cta-btn">Register as Volunteer →</button>
+    <div class="cta-sub">
+      Partner enquiries: <a href="mailto:hello@voltr.org">hello@voltr.org</a> &nbsp;·&nbsp;
+      Platform: <a href="#">voltr.org</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 11 · CLOSING ═══ -->
+<div class="slide" id="s11">
+  <div class="logo-lockup">
+    <div class="logo-mark">M</div>
+    <div class="logo-name">VOLTR</div>
+  </div>
+  <h2>Every expert hour<br/>is a <span>future unlocked.</span></h2>
+  <p class="tagline">Empowering Rural Futures — One Mentor at a Time</p>
+  <div class="contact">
+    <div class="contact-item"><strong>Platform</strong>voltr.org</div>
+    <div class="contact-item"><strong>Volunteer</strong>voltr.org/volunteer/register</div>
+    <div class="contact-item"><strong>Partner</strong>hello@voltr.org</div>
+    <div class="contact-item"><strong>Sponsor</strong>support@voltr.org</div>
+  </div>
+  <div class="slide-num-badge">VOLTR · Stakeholder Presentation · June 2026 · Confidential</div>
+</div>
+
+</div><!-- /.deck -->
+
+<!-- ── CONTROLS ─────────────────────────────────────────────────── -->
+<div class="controls">
+  <button class="ctrl-btn" id="prev" title="Previous (←)">‹</button>
+  <div class="progress-dots" id="dots"></div>
+  <span class="slide-counter" id="counter">1 / 11</span>
+  <button class="ctrl-btn" id="next" title="Next (→)">›</button>
+</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const dotsEl = document.getElementById('dots');
+const counterEl = document.getElementById('counter');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+let current = 0;
+
+// Build dots
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active-dot' : '');
+  d.addEventListener('click', () => go(i));
+  dotsEl.appendChild(d);
+});
+
+function go(n) {
+  slides[current].classList.remove('active');
+  dotsEl.children[current].classList.remove('active-dot');
+  current = Math.max(0, Math.min(slides.length - 1, n));
+  slides[current].classList.add('active');
+  dotsEl.children[current].classList.add('active-dot');
+  counterEl.textContent = (current + 1) + ' / ' + slides.length;
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current === slides.length - 1;
+}
+
+prevBtn.addEventListener('click', () => go(current - 1));
+nextBtn.addEventListener('click', () => go(current + 1));
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(current + 1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1); }
+  if (e.key === 'Home') go(0);
+  if (e.key === 'End') go(slides.length - 1);
+});
+
+go(0);
+</script>
+</body>
+</html>
