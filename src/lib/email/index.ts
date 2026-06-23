@@ -1,7 +1,12 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
-const FROM = process.env.EMAIL_FROM ?? "VOLTR <noreply@voltr.org>";
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY!);
+}
+
+function getFrom() {
+  return process.env.EMAIL_FROM ?? "VOLTR <noreply@voltr.org>";
+}
 
 export async function sendVerificationEmail(
   to: string,
@@ -9,8 +14,8 @@ export async function sendVerificationEmail(
   token: string
 ) {
   const url = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/verify-email?token=${token}`;
-  await resend.emails.send({
-    from: FROM,
+  await getResend().emails.send({
+    from: getFrom(),
     to,
     subject: "Verify your VOLTR account",
     html: `
@@ -25,8 +30,8 @@ export async function sendVerificationEmail(
 
 export async function sendApprovalEmail(to: string, name: string) {
   const url = `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`;
-  await resend.emails.send({
-    from: FROM,
+  await getResend().emails.send({
+    from: getFrom(),
     to,
     subject: "Your VOLTR volunteer application has been approved!",
     html: `
@@ -43,8 +48,8 @@ export async function sendRejectionEmail(
   name: string,
   reason?: string
 ) {
-  await resend.emails.send({
-    from: FROM,
+  await getResend().emails.send({
+    from: getFrom(),
     to,
     subject: "Update on your VOLTR volunteer application",
     html: `
@@ -62,8 +67,8 @@ export async function sendPasswordResetEmail(
   token: string
 ) {
   const url = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password?token=${token}`;
-  await resend.emails.send({
-    from: FROM,
+  await getResend().emails.send({
+    from: getFrom(),
     to,
     subject: "Reset your VOLTR password",
     html: `
