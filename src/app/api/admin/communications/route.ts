@@ -4,12 +4,7 @@ import { communicationCampaigns, volunteerProfiles, users } from "@/lib/db/schem
 import { requireAdmin } from "@/lib/auth/session";
 import { ok, err, SERVER_ERROR, FORBIDDEN } from "@/lib/api-response";
 import { eq, desc } from "drizzle-orm";
-import { Resend } from "resend";
 import { z } from "zod";
-
-function getResend() {
-  return new Resend(process.env.RESEND_API_KEY!);
-}
 
 const schema = z.object({
   subject: z.string().min(1).max(500),
@@ -80,7 +75,9 @@ export async function POST(req: NextRequest) {
       const batchSize = 50;
       for (let i = 0; i < recipients.length; i += batchSize) {
         const batch = recipients.slice(i, i + batchSize);
-        await getResend().batch.send(
+        const { Resend } = await import("resend");
+        const resend = new Resend(process.env.RESEND_API_KEY!);
+        await resend.batch.send(
           batch.map((r) => ({
             from: process.env.EMAIL_FROM ?? "VOLTR <noreply@voltr.org>",
             to: r.email,

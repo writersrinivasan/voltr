@@ -1,21 +1,19 @@
-import { Resend } from "resend";
+const FROM = () => process.env.EMAIL_FROM ?? "VOLTR <noreply@voltr.org>";
+const BASE = () => process.env.NEXT_PUBLIC_BASE_URL ?? "";
 
-function getResend() {
-  return new Resend(process.env.RESEND_API_KEY!);
+async function send(payload: {
+  to: string;
+  subject: string;
+  html: string;
+}) {
+  const { Resend } = await import("resend");
+  const resend = new Resend(process.env.RESEND_API_KEY!);
+  await resend.emails.send({ from: FROM(), ...payload });
 }
 
-function getFrom() {
-  return process.env.EMAIL_FROM ?? "VOLTR <noreply@voltr.org>";
-}
-
-export async function sendVerificationEmail(
-  to: string,
-  name: string,
-  token: string
-) {
-  const url = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/verify-email?token=${token}`;
-  await getResend().emails.send({
-    from: getFrom(),
+export async function sendVerificationEmail(to: string, name: string, token: string) {
+  const url = `${BASE()}/auth/verify-email?token=${token}`;
+  await send({
     to,
     subject: "Verify your VOLTR account",
     html: `
@@ -29,9 +27,8 @@ export async function sendVerificationEmail(
 }
 
 export async function sendApprovalEmail(to: string, name: string) {
-  const url = `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`;
-  await getResend().emails.send({
-    from: getFrom(),
+  const url = `${BASE()}/dashboard`;
+  await send({
     to,
     subject: "Your VOLTR volunteer application has been approved!",
     html: `
@@ -43,13 +40,8 @@ export async function sendApprovalEmail(to: string, name: string) {
   });
 }
 
-export async function sendRejectionEmail(
-  to: string,
-  name: string,
-  reason?: string
-) {
-  await getResend().emails.send({
-    from: getFrom(),
+export async function sendRejectionEmail(to: string, name: string, reason?: string) {
+  await send({
     to,
     subject: "Update on your VOLTR volunteer application",
     html: `
@@ -61,14 +53,9 @@ export async function sendRejectionEmail(
   });
 }
 
-export async function sendPasswordResetEmail(
-  to: string,
-  name: string,
-  token: string
-) {
-  const url = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password?token=${token}`;
-  await getResend().emails.send({
-    from: getFrom(),
+export async function sendPasswordResetEmail(to: string, name: string, token: string) {
+  const url = `${BASE()}/auth/reset-password?token=${token}`;
+  await send({
     to,
     subject: "Reset your VOLTR password",
     html: `
