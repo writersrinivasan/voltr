@@ -1,14 +1,24 @@
 const FROM = () => process.env.EMAIL_FROM ?? "VOLTR <noreply@voltr.org>";
 const BASE = () => process.env.NEXT_PUBLIC_BASE_URL ?? "";
 
-async function send(payload: {
-  to: string;
-  subject: string;
-  html: string;
-}) {
-  const { Resend } = await import("resend");
-  const resend = new Resend(process.env.RESEND_API_KEY!);
-  await resend.emails.send({ from: FROM(), ...payload });
+async function send(payload: { to: string; subject: string; html: string }) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.warn("[email] RESEND_API_KEY not set — skipping send");
+    return;
+  }
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ from: FROM(), ...payload }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("[email] Resend API error:", text);
+  }
 }
 
 export async function sendVerificationEmail(to: string, name: string, token: string) {

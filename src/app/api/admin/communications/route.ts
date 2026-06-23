@@ -70,21 +70,21 @@ export async function POST(req: NextRequest) {
       })
       .returning();
 
-    if (sendNow && recipients.length > 0) {
-      // Batch send (max 50 per batch for Resend)
+    if (sendNow && recipients.length > 0 && process.env.RESEND_API_KEY) {
+      const from = process.env.EMAIL_FROM ?? "VOLTR <noreply@voltr.org>";
       const batchSize = 50;
       for (let i = 0; i < recipients.length; i += batchSize) {
         const batch = recipients.slice(i, i + batchSize);
-        const { Resend } = await import("resend");
-        const resend = new Resend(process.env.RESEND_API_KEY!);
-        await resend.batch.send(
-          batch.map((r) => ({
-            from: process.env.EMAIL_FROM ?? "VOLTR <noreply@voltr.org>",
-            to: r.email,
-            subject,
-            html: bodyHtml,
-          }))
-        );
+        await fetch("https://api.resend.com/emails/batch", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(
+            batch.map((r) => ({ from, to: r.email, subject, html: bodyHtml }))
+          ),
+        });
       }
     }
 
